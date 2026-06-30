@@ -1,5 +1,5 @@
 ﻿using Microsoft.SemanticKernel;
-using OllamaSharp;
+using MSSemantic.Services;
 
 
 var kernelBuilder = Kernel.CreateBuilder();
@@ -8,6 +8,8 @@ kernelBuilder.AddOllamaChatClient(modelId: "qwen2.5:14b", endpoint: new Uri("htt
 
 var kernel = kernelBuilder.Build();
 
-var result = await kernel.InvokePromptAsync("Serinlemenin en kolay yolu nedir?");
+var chatService = new ChatService(kernel);
+
+var result = await chatService.AskAsync("Türkiye'nin başkenti neresidir?");
 
 Console.WriteLine(result);
