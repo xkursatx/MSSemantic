@@ -2,11 +2,11 @@
 
 namespace MSSemantic.Services
 {
-    public class ChatService
+    public class MyChatService
     {
         private readonly Kernel _kernel;
 
-        public ChatService(Kernel kernel)
+        public MyChatService(Kernel kernel)
         {
             _kernel = kernel;
         }
