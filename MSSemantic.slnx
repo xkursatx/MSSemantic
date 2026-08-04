@@ -1,6 +1,5 @@
 <Solution>
   <Folder Name="/Solution Items/">
-    <File Path="ollama.bat" />
     <File Path="README.md" />
     <File Path="sql.md" />
     <File Path="yerel-yapay-zeka-agent-3-postgresql.md" />

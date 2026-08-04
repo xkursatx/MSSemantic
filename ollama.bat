@@ -1,1 +1,0 @@
-curl -g http://192.168.5.200:11434/api/chat -H "Authorization: Bearer 1cc464e023b54536aa616939fc71d51d.RV9CBVA25D9T3ulE2TgKqmuj" -d "{\"model\": \"kimi-k3:cloud\", \"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]}"
