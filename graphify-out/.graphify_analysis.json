@@ -1,0 +1,266 @@
+{
+  "communities": {
+    "0": [
+      "csharp_namespace:058225e7d8749087",
+      "csharp_namespace:0a10f82e13005da6",
+      "csharp_namespace:3fa26bc765433431",
+      "dbcontext",
+      "dbset",
+      "icollection",
+      "idesigntimedbcontextfactory",
+      "mssemantic_data_applicationdbcontext",
+      "mssemantic_data_applicationdbcontext_cs_modelbuilder",
+      "mssemantic_data_applicationdbcontext_mssemantic_data_applicationdbcontext",
+      "mssemantic_data_applicationdbcontext_mssemantic_data_applicationdbcontext_onmodelcreating",
+      "mssemantic_data_applicationdbcontextfactory",
+      "mssemantic_data_applicationdbcontextfactory_mssemantic_data_applicationdbcontextfactory",
+      "mssemantic_data_applicationdbcontextfactory_mssemantic_data_applicationdbcontextfactory_createdbcontext",
+      "mssemantic_models_messagemodel",
+      "mssemantic_models_messagemodel_cs_datetime",
+      "mssemantic_models_messagemodel_cs_guid",
+      "mssemantic_models_messagemodel_mssemantic_models_messagemodel",
+      "mssemantic_models_productmodel",
+      "mssemantic_models_sessionmodel",
+      "mssemantic_models_sessionmodel_cs_datetime",
+      "mssemantic_models_sessionmodel_cs_guid",
+      "mssemantic_models_sessionmodel_mssemantic_models_sessionmodel",
+      "mssemantic_plugins_productsplugin",
+      "mssemantic_program"
+    ],
+    "1": [
+      "csharp_namespace:1ab9abbef1b86810",
+      "migration",
+      "mssemantic_migrations_20260803142721_initialcreate",
+      "mssemantic_migrations_20260803142721_initialcreate_cs_migrationbuilder",
+      "mssemantic_migrations_20260803142721_initialcreate_designer",
+      "mssemantic_migrations_20260803142721_initialcreate_designer_cs_modelbuilder",
+      "mssemantic_migrations_20260803142721_initialcreate_designer_mssemantic_migrations_initialcreate",
+      "mssemantic_migrations_20260803142721_initialcreate_designer_mssemantic_migrations_initialcreate_buildtargetmodel",
+      "mssemantic_migrations_20260803142721_initialcreate_mssemantic_migrations_initialcreate",
+      "mssemantic_migrations_20260803142721_initialcreate_mssemantic_migrations_initialcreate_down",
+      "mssemantic_migrations_20260803142721_initialcreate_mssemantic_migrations_initialcreate_up",
+      "mssemantic_migrations_20260803142846_seedproducts",
+      "mssemantic_migrations_20260803142846_seedproducts_cs_migrationbuilder",
+      "mssemantic_migrations_20260803142846_seedproducts_mssemantic_migrations_seedproducts",
+      "mssemantic_migrations_20260803142846_seedproducts_mssemantic_migrations_seedproducts_down",
+      "mssemantic_migrations_20260803142846_seedproducts_mssemantic_migrations_seedproducts_up",
+      "mssemantic_migrations_20260803143128_addchathistory",
+      "mssemantic_migrations_20260803143128_addchathistory_cs_migrationbuilder",
+      "mssemantic_migrations_20260803143128_addchathistory_designer",
+      "mssemantic_migrations_20260803143128_addchathistory_designer_cs_modelbuilder",
+      "mssemantic_migrations_20260803143128_addchathistory_designer_mssemantic_migrations_addchathistory",
+      "mssemantic_migrations_20260803143128_addchathistory_designer_mssemantic_migrations_addchathistory_buildtargetmodel",
+      "mssemantic_migrations_20260803143128_addchathistory_mssemantic_migrations_addchathistory",
+      "mssemantic_migrations_20260803143128_addchathistory_mssemantic_migrations_addchathistory_down",
+      "mssemantic_migrations_20260803143128_addchathistory_mssemantic_migrations_addchathistory_up"
+    ],
+    "2": [
+      "description",
+      "kernelfunction",
+      "list",
+      "mssemantic_models_productmodel_mssemantic_models_productmodel",
+      "mssemantic_plugins_productsplugin_cs_task",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getaveragepriceasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getcheapestproductasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getdetailasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getinstockproductsasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getlowstockproductsasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getmostexpensiveproductasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getoutofstockproductsasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getproductcountasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getproductsasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getproductsbypricerangeasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_getproductsunderpriceasync",
+      "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin_searchbynameasync"
+    ],
+    "3": [
+      "framework_net10_0",
+      "mssemantic",
+      "mssemantic_mssemantic",
+      "nuget_microsoft_entityframeworkcore_design",
+      "nuget_microsoft_extensions_configuration_json",
+      "nuget_microsoft_semantickernel",
+      "nuget_microsoft_semantickernel_connectors_ollama",
+      "nuget_microsoft_semantickernel_connectors_openai",
+      "nuget_npgsql",
+      "nuget_npgsql_entityframeworkcore_postgresql",
+      "sdk_microsoft_net_sdk"
+    ],
+    "4": [
+      "mssemantic_data_ichathistoryrepository",
+      "mssemantic_data_ichathistoryrepository_cs_authorrole",
+      "mssemantic_data_ichathistoryrepository_cs_chathistory",
+      "mssemantic_data_ichathistoryrepository_cs_guid",
+      "mssemantic_data_ichathistoryrepository_cs_task",
+      "mssemantic_data_ichathistoryrepository_ichathistoryrepository",
+      "mssemantic_data_ichathistoryrepository_ichathistoryrepository_createsessionasync",
+      "mssemantic_data_ichathistoryrepository_ichathistoryrepository_ensureschemaasync",
+      "mssemantic_data_ichathistoryrepository_ichathistoryrepository_loadhistoryasync",
+      "mssemantic_data_ichathistoryrepository_ichathistoryrepository_savemessageasync"
+    ],
+    "5": [
+      "mssemantic_data_postgreschathistoryrepository",
+      "mssemantic_data_postgreschathistoryrepository_cs_authorrole",
+      "mssemantic_data_postgreschathistoryrepository_cs_chathistory",
+      "mssemantic_data_postgreschathistoryrepository_cs_guid",
+      "mssemantic_data_postgreschathistoryrepository_cs_task",
+      "mssemantic_data_postgreschathistoryrepository_mssemantic_data_postgreschathistoryrepository",
+      "mssemantic_data_postgreschathistoryrepository_mssemantic_data_postgreschathistoryrepository_createsessionasync",
+      "mssemantic_data_postgreschathistoryrepository_mssemantic_data_postgreschathistoryrepository_ensureschemaasync",
+      "mssemantic_data_postgreschathistoryrepository_mssemantic_data_postgreschathistoryrepository_loadhistoryasync",
+      "mssemantic_data_postgreschathistoryrepository_mssemantic_data_postgreschathistoryrepository_savemessageasync"
+    ],
+    "6": [
+      "csharp_namespace:e7fefa16b73ea9e8",
+      "kernel",
+      "mssemantic_services_mychatservice",
+      "mssemantic_services_mychatservice_cs_task",
+      "mssemantic_services_mychatservice_mssemantic_services_mychatservice",
+      "mssemantic_services_mychatservice_mssemantic_services_mychatservice_askasync"
+    ],
+    "7": [
+      "modelsnapshot",
+      "mssemantic_migrations_applicationdbcontextmodelsnapshot",
+      "mssemantic_migrations_applicationdbcontextmodelsnapshot_cs_modelbuilder",
+      "mssemantic_migrations_applicationdbcontextmodelsnapshot_mssemantic_migrations_applicationdbcontextmodelsnapshot",
+      "mssemantic_migrations_applicationdbcontextmodelsnapshot_mssemantic_migrations_applicationdbcontextmodelsnapshot_buildmodel"
+    ],
+    "8": [
+      "mssemantic_migrations_20260803142846_seedproducts_designer",
+      "mssemantic_migrations_20260803142846_seedproducts_designer_cs_modelbuilder",
+      "mssemantic_migrations_20260803142846_seedproducts_designer_mssemantic_migrations_seedproducts",
+      "mssemantic_migrations_20260803142846_seedproducts_designer_mssemantic_migrations_seedproducts_buildtargetmodel"
+    ],
+    "9": [
+      "mssemantic_models_ollamamodels",
+      "mssemantic_models_ollamamodels_ollamamodels",
+      "string"
+    ]
+  },
+  "cohesion": {
+    "0": 0.10333333333333333,
+    "1": 0.09666666666666666,
+    "2": 0.42483660130718953,
+    "3": 0.18181818181818182,
+    "4": 0.3111111111111111,
+    "5": 0.3111111111111111,
+    "6": 0.3333333333333333,
+    "7": 0.4,
+    "8": 0.5,
+    "9": 0.6666666666666666
+  },
+  "gods": [
+    {
+      "id": "mssemantic_plugins_productsplugin_mssemantic_plugins_productsplugin",
+      "label": "ProductsPlugin",
+      "degree": 14
+    },
+    {
+      "id": "mssemantic_models_productmodel_mssemantic_models_productmodel",
+      "label": "ProductModel",
+      "degree": 12
+    },
+    {
+      "id": "mssemantic_data_applicationdbcontext_mssemantic_data_applicationdbcontext",
+      "label": "ApplicationDbContext",
+      "degree": 11
+    },
+    {
+      "id": "mssemantic_mssemantic",
+      "label": "MSSemantic",
+      "degree": 10
+    },
+    {
+      "id": "csharp_namespace:3fa26bc765433431",
+      "label": "MSSemantic.Data",
+      "degree": 9
+    },
+    {
+      "id": "mssemantic_data_postgreschathistoryrepository_mssemantic_data_postgreschathistoryrepository",
+      "label": "PostgresChatHistoryRepository",
+      "degree": 7
+    },
+    {
+      "id": "csharp_namespace:1ab9abbef1b86810",
+      "label": "MSSemantic.Migrations",
+      "degree": 7
+    },
+    {
+      "id": "mssemantic_data_ichathistoryrepository_ichathistoryrepository",
+      "label": "IChatHistoryRepository",
+      "degree": 6
+    },
+    {
+      "id": "csharp_namespace:058225e7d8749087",
+      "label": "MSSemantic.Models",
+      "degree": 6
+    },
+    {
+      "id": "mssemantic_models_sessionmodel_mssemantic_models_sessionmodel",
+      "label": "SessionModel",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "ApplicationDbContext",
+      "target": "ProductModel",
+      "source_files": [
+        "MSSemantic/Data/ApplicationDbContext.cs",
+        "MSSemantic/Models/ProductModel.cs"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "PostgresChatHistoryRepository",
+      "target": "ApplicationDbContext",
+      "source_files": [
+        "MSSemantic/Data/PostgresChatHistoryRepository.cs",
+        "MSSemantic/Data/ApplicationDbContext.cs"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "ProductsPlugin",
+      "target": "ApplicationDbContext",
+      "source_files": [
+        "MSSemantic/Plugins/ProductsPlugin.cs",
+        "MSSemantic/Data/ApplicationDbContext.cs"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "PostgresChatHistoryRepository",
+      "target": "IChatHistoryRepository",
+      "source_files": [
+        "MSSemantic/Data/PostgresChatHistoryRepository.cs",
+        "MSSemantic/Data/IChatHistoryRepository.cs"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "implements",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "ApplicationDbContext",
+      "target": "MessageModel",
+      "source_files": [
+        "MSSemantic/Data/ApplicationDbContext.cs",
+        "MSSemantic/Models/MessageModel.cs"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "cross-file semantic connection"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

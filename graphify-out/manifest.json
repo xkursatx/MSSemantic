@@ -1,0 +1,107 @@
+{
+  "MSSemantic.slnx": {
+    "mtime": 1785833108.8941867,
+    "ast_hash": "0686b3520d16e910801298449821fe0c",
+    "semantic_hash": "0686b3520d16e910801298449821fe0c"
+  },
+  "MSSemantic/Data/ApplicationDbContext.cs": {
+    "mtime": 1785767431.798626,
+    "ast_hash": "aa2401acea22d62e85ba613628ee6577",
+    "semantic_hash": "aa2401acea22d62e85ba613628ee6577"
+  },
+  "MSSemantic/Data/ApplicationDbContextFactory.cs": {
+    "mtime": 1785767199.150162,
+    "ast_hash": "b39f7c3f86ccd6101ce76b2c9df217df",
+    "semantic_hash": "b39f7c3f86ccd6101ce76b2c9df217df"
+  },
+  "MSSemantic/Data/IChatHistoryRepository.cs": {
+    "mtime": 1785763499.8424823,
+    "ast_hash": "cfdeaf426489934cd42a589d1108f8ee",
+    "semantic_hash": "cfdeaf426489934cd42a589d1108f8ee"
+  },
+  "MSSemantic/Data/PostgresChatHistoryRepository.cs": {
+    "mtime": 1785767447.506587,
+    "ast_hash": "b43d7f22332ab1885415335ef69e055f",
+    "semantic_hash": "b43d7f22332ab1885415335ef69e055f"
+  },
+  "MSSemantic/MSSemantic.csproj": {
+    "mtime": 1785768000.7676435,
+    "ast_hash": "e5f4eea771b3a4df55141ff950b78a84",
+    "semantic_hash": "e5f4eea771b3a4df55141ff950b78a84"
+  },
+  "MSSemantic/Migrations/20260803142721_InitialCreate.Designer.cs": {
+    "mtime": 1785767241.115698,
+    "ast_hash": "0d08bf500bc336e32642c7a38d32d228",
+    "semantic_hash": "0d08bf500bc336e32642c7a38d32d228"
+  },
+  "MSSemantic/Migrations/20260803142721_InitialCreate.cs": {
+    "mtime": 1785767241.1136546,
+    "ast_hash": "6dadea3f3f679ac6fb03eb88109953d6",
+    "semantic_hash": "6dadea3f3f679ac6fb03eb88109953d6"
+  },
+  "MSSemantic/Migrations/20260803142846_SeedProducts.Designer.cs": {
+    "mtime": 1785767326.162509,
+    "ast_hash": "1eda50f3952f8e78b89573a93a91b9c4",
+    "semantic_hash": "1eda50f3952f8e78b89573a93a91b9c4"
+  },
+  "MSSemantic/Migrations/20260803142846_SeedProducts.cs": {
+    "mtime": 1785767326.1575058,
+    "ast_hash": "b36659b138b119aa9cc1bbba69cf7306",
+    "semantic_hash": "b36659b138b119aa9cc1bbba69cf7306"
+  },
+  "MSSemantic/Migrations/20260803143128_AddChatHistory.Designer.cs": {
+    "mtime": 1785767488.6861386,
+    "ast_hash": "fa3108bc8f52c7993f9ad0f2103cb400",
+    "semantic_hash": "fa3108bc8f52c7993f9ad0f2103cb400"
+  },
+  "MSSemantic/Migrations/20260803143128_AddChatHistory.cs": {
+    "mtime": 1785767488.682578,
+    "ast_hash": "5a87849513114c86cc5816d686fdfe93",
+    "semantic_hash": "5a87849513114c86cc5816d686fdfe93"
+  },
+  "MSSemantic/Migrations/ApplicationDbContextModelSnapshot.cs": {
+    "mtime": 1785767488.6911676,
+    "ast_hash": "5cffe3530e1241e2937072c6f10cb4f3",
+    "semantic_hash": "5cffe3530e1241e2937072c6f10cb4f3"
+  },
+  "MSSemantic/Models/MessageModel.cs": {
+    "mtime": 1785767418.6538396,
+    "ast_hash": "b740558b433f58b0b1bd4dfaf6f3566c",
+    "semantic_hash": "b740558b433f58b0b1bd4dfaf6f3566c"
+  },
+  "MSSemantic/Models/OllamaModels.cs": {
+    "mtime": 1785831936.202218,
+    "ast_hash": "01fd3bbad2d418e0348c372d7a4373a2",
+    "semantic_hash": "01fd3bbad2d418e0348c372d7a4373a2"
+  },
+  "MSSemantic/Models/ProductModel.cs": {
+    "mtime": 1785766636.5240011,
+    "ast_hash": "27f56a5500e128184b53325b13d4742e",
+    "semantic_hash": "27f56a5500e128184b53325b13d4742e"
+  },
+  "MSSemantic/Models/SessionModel.cs": {
+    "mtime": 1785767418.6810145,
+    "ast_hash": "4560f6c34c079dfb21d36d0770156a43",
+    "semantic_hash": "4560f6c34c079dfb21d36d0770156a43"
+  },
+  "MSSemantic/Plugins/ProductsPlugin.cs": {
+    "mtime": 1785768349.1735315,
+    "ast_hash": "a64f266e70e2f90be8f7132979090b1f",
+    "semantic_hash": "a64f266e70e2f90be8f7132979090b1f"
+  },
+  "MSSemantic/Program.cs": {
+    "mtime": 1785825200.0324128,
+    "ast_hash": "951db81ab65e17f2c62a0c1a1790e483",
+    "semantic_hash": "951db81ab65e17f2c62a0c1a1790e483"
+  },
+  "MSSemantic/Services/MyChatService.cs": {
+    "mtime": 1783064103.191467,
+    "ast_hash": "fc1daed9c562117d051d5a20d8627e16",
+    "semantic_hash": "fc1daed9c562117d051d5a20d8627e16"
+  },
+  "MSSemantic/appsettings.json": {
+    "mtime": 1785831129.75498,
+    "ast_hash": "7e157bf2bc1d3e31a0ba42b57ef21d72",
+    "semantic_hash": "7e157bf2bc1d3e31a0ba42b57ef21d72"
+  }
+}
