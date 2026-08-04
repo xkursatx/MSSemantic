@@ -225,12 +225,100 @@ Model ihtiyaç duyduğunda uygun plugin fonksiyonunu kendisi seçer ve çağır�
 
 ### ProductsPlugin
 
-Ürün sorgulama için iki fonksiyon sunar:
+ProductsPlugin, ürün veritabanı üzerinde kapsamlı sorgulama ve analiz yetenekleri sunar. Plugin, DbContext üzerinden doğrudan veritabanı ile iletişim kurar ve AI modelinin ihtiyaç duyduğunda otomatik olarak çağırabileceği 13 farklı fonksiyon içerir.
 
-1. **get_products**: Ürün listesini döner
-2. **get_detail**: Belirli bir ürünün detaylarını döner
+#### Temel Fonksiyonlar
 
-Plugin, DbContext üzerinden doğrudan veritabanı ile iletişim kurar.
+1. **get_products**: Tüm ürünlerin listesini ID ve isim bilgisi ile getirir
+   - Parametre yok
+   - Döndürür: Ürün listesi (ID, Name)
+
+2. **get_detail**: Belirtilen ID'ye sahip ürünün tüm detaylarını getirir
+   - Parametre: `id` (int) - Ürün ID'si
+   - Döndürür: ProductModel (ID, Name, Description, Detail, Price, InStock)
+
+#### Arama ve Filtreleme Fonksiyonları
+
+3. **search_products_by_name**: İsmi verilen anahtar kelimeyi içeren ürünleri arar
+   - Parametre: `keyword` (string) - Aranacak kelime
+   - Büyük/küçük harf duyarsız (case-insensitive)
+   - Örnek: "masa", "lamba"
+
+4. **get_products_under_price**: Belirtilen fiyatın altında veya eşit fiyattaki ürünleri listeler
+   - Parametre: `maxPrice` (decimal) - Üst fiyat sınırı (TL)
+   - Fiyata göre artan sırada döner
+
+5. **get_products_by_price_range**: Belirtilen fiyat aralığındaki ürünleri listeler
+   - Parametreler:
+     - `minPrice` (decimal) - En düşük fiyat (TL)
+     - `maxPrice` (decimal) - En yüksek fiyat (TL)
+   - Fiyata göre artan sırada döner
+
+6. **get_low_stock_products**: Stoğu belirtilen eşiğin altında veya eşit olan ürünleri listeler
+   - Parametre: `threshold` (int, varsayılan: 5) - Stok eşiği
+   - Stok miktarına göre artan sırada döner
+
+7. **get_in_stock_products**: Stokta olan (stok sayısı 0'dan büyük) ürünleri listeler
+   - Parametre yok
+   - İsme göre alfabetik sırada döner
+
+8. **get_out_of_stock_products**: Stoğu tükenmiş (stok sayısı 0) ürünleri listeler
+   - Parametre yok
+   - İsme göre alfabetik sırada döner
+
+#### İstatistik Fonksiyonları
+
+9. **get_cheapest_product**: En ucuz ürünü getirir
+   - Parametre yok
+   - Döndürür: ProductModel
+
+10. **get_most_expensive_product**: En pahalı ürünü getirir
+    - Parametre yok
+    - Döndürür: ProductModel
+
+11. **get_product_count**: Toplam ürün sayısını getirir
+    - Parametre yok
+    - Döndürür: int
+
+12. **get_average_price**: Tüm ürünlerin ortalama fiyatını hesaplar
+    - Parametre yok
+    - Döndürür: decimal (TL)
+
+#### Örnek Kullanım Senaryoları
+
+```
+Kullanıcı: "Hangi ürünleriniz var?"
+→ AI: get_products() fonksiyonunu çağırır
+
+Kullanıcı: "500 TL altındaki ürünleri göster"
+→ AI: get_products_under_price(maxPrice: 500) fonksiyonunu çağırır
+
+Kullanıcı: "Masa lambasının detaylarını ver"
+→ AI: search_products_by_name(keyword: "masa") + get_detail(id: X) fonksiyonlarını çağırır
+
+Kullanıcı: "Stokta kaç ürün var?"
+→ AI: get_in_stock_products() fonksiyonunu çağırır
+
+Kullanıcı: "En ucuz ürün hangisi?"
+→ AI: get_cheapest_product() fonksiyonunu çağırır
+
+Kullanıcı: "200-400 TL arası ürünler neler?"
+→ AI: get_products_by_price_range(minPrice: 200, maxPrice: 400) fonksiyonunu çağırır
+```
+
+#### Plugin Yapısı
+
+Plugin, Entity Framework Core üzerinden asenkron sorgular çalışır ve performans için:
+- Sadece gerekli alanları seçer (Select projection)
+- LINQ sorguları kullanır
+- Case-insensitive arama için `EF.Functions.ILike` kullanır
+- Sonuçları anlamlı şekilde sıralar (OrderBy)
+
+Her fonksiyon:
+- `[KernelFunction]` attribute ile işaretlenmiştir
+- `[Description]` attribute ile AI modeline açıklanmıştır
+- Parametreler de `[Description]` ile tanımlanmıştır
+- Semantic Kernel tarafından otomatik keşfedilir ve çağrılabilir
 
 ## Geliştirme Notları
 
