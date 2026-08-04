@@ -1,5 +1,6 @@
 ﻿public static class OllamaModels
 {
+    public const string Gemma4_12B = "gemma4:12b";
     public const string Qwen35_08B = "qwen3.5:0.8b";
     public const string Qwen35_4B = "qwen3.5:4b";
 
