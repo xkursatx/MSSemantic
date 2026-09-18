@@ -1,0 +1,30 @@
+@model ChatViewModel
+
+<h1>UMAI Bilişim Ürün Asistanı</h1>
+<p class="subtitle">Semantic Kernel ve Ollama ile çalışan basit MVC chat ekranı</p>
+
+<div class="chat">
+    @if (Model.Messages.Count == 0)
+    {
+        <p>Merhaba! Ürünlerimiz, fiyatlar veya stok durumu hakkında soru sorabilirsiniz.</p>
+    }
+    @foreach (var message in Model.Messages)
+    {
+        <div class="message @(message.Role == "user" ? "user" : "assistant")">
+            <strong>@(message.Role == "user" ? "Siz" : "Cemile"):</strong>
+            <div>@message.Content</div>
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.Error))
+    {
+        <p class="error">@Model.Error</p>
+    }
+    <form asp-action="Ask" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="sessionId" value="@Model.SessionId" />
+        <label for="question">Sorunuz</label>
+        <textarea id="question" name="question" placeholder="Örneğin: 500 TL altındaki ürünler hangileri?">@Model.Question</textarea>
+        <button type="submit">Gönder</button>
+        <a asp-action="Index">Yeni konuşma</a>
+    </form>
+</div>
