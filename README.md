@@ -21,6 +21,9 @@ Bu örnekte;
 -   Tool Calling
 -   Plugin Mimarisi
 -   Streaming Chat
+-   Etkileşimli LLM Playground
+-   Ollama model seçimi
+-   Temperature, Top P, Top K ve maksimum token ayarları
 -   Migration Yönetimi
 
 bir arada kullanılmaktadır.
@@ -58,8 +61,12 @@ MSSemantic/
 │   └── PostgresChatHistoryRepository.cs # Chat history repository
 ├── Models/
 │   ├── ProductModel.cs                  # Ürün entity
+│   ├── ChatGenerationOptions.cs         # LLM üretim ayarları
 │   ├── SessionModel.cs                  # Chat session entity
 │   └── MessageModel.cs                  # Chat message entity
+├── Services/
+│   ├── ChatService.cs                   # Chat, tool calling ve streaming
+│   └── OllamaModelCatalog.cs            # Ollama /api/tags model listesi
 ├── Plugins/
 │   └── ProductsPlugin.cs                # Ürün sorgulama plugin'i
 ├── Migrations/                          # EF Core migrations
@@ -75,7 +82,7 @@ Uygulama yapılandırması `appsettings.json` dosyasından okunur:
 
 ```json
 {
-  "AiProvider": "LocalOllama",  // LocalOllama, CloudOllama, OpenAI, AzureOpenAI
+  "AiProvider": "LocalOllama",  // LocalOllama veya OpenAI
   "ConnectionStrings": {
     "DefaultConnection": "Host=localhost;Port=5432;Database=chatdb;Username=user;Password=pass"
   },
@@ -104,9 +111,10 @@ Uygulama yapılandırması `appsettings.json` dosyasından okunur:
 ### AI Provider Seçenekleri
 
 1. **LocalOllama**: Yerel bilgisayarda çalışan Ollama servisi
-2. **CloudOllama**: Uzak sunucuda veya cloud'da çalışan Ollama servisi
-3. **OpenAI**: OpenAI API
-4. **AzureOpenAI**: Azure OpenAI Service
+2. **OpenAI**: OpenAI API
+
+Cloud Ollama ve Azure OpenAI ayarları örnek yapılandırma olarak bulunur;
+mevcut uygulama akışında aktif provider desteği `LocalOllama` ve `OpenAI`dir.
 
 ## Öne Çıkan Noktalar
 
@@ -118,6 +126,25 @@ Uygulama yapılandırması `appsettings.json` dosyasından okunur:
 -   **System Prompt**: Asistan karakteri ve kuralları tanımlı
 -   **Otomatik Tool Calling**: Model ihtiyaç duyduğunda fonksiyon çağırır
 -   **Plugin Mimarisi**: Yeni yetenekler kolayca eklenebilir
+
+### LLM Playground Ayarları
+
+Local Ollama kullanırken chat ekranından şu değerler değiştirilebilir:
+
+- `Temperature`: Cevabın çeşitliliği ve yaratıcılığı
+- `Top P`: Olasılık kümesinin genişliği
+- `Top K`: Değerlendirilen aday token sayısı
+- `NumPredict`: Maksimum çıktı token sayısı
+- `Model`: Ollama üzerinde yüklü model
+
+Hazır profiller aynı soruyu farklı davranışlarla denemeyi kolaylaştırır:
+
+- **Dengeli**: Temperature `0.7`, Top P `0.9`, Top K `40`
+- **Yaratıcı**: Temperature `1.2`, Top P `0.95`, Top K `80`
+- **Odaklı**: Temperature `0.2`, Top P `0.6`, Top K `20`
+
+Thinking ayarı bu sürümde eklenmemiştir; model ve connector'a göre değiştiği
+için ortak bir ayar olarak varsayılmamıştır.
 
 ## Veritabanı
 
@@ -169,19 +196,33 @@ Yerel Ollama kullanmak için:
 ollama pull qwen2.5:3b
 ```
 
-### 5. Uygulamayı Çalıştırma
+### 5. Ollama Modellerini Kontrol Etme
+
+Ollama'nın çalıştığını ve en az bir modelin yüklü olduğunu kontrol edin:
+
+```bash
+ollama list
+ollama pull qwen2.5:3b
+```
+
+Uygulama chat ekranını açarken Ollama'nın `/api/tags` endpoint'inden yüklü
+modelleri listeler. Listeden seçilen model sonraki chat isteğinde gerçekten
+kullanılır.
+
+### 6. Uygulamayı Çalıştırma
 ```bash
 dotnet run
 ```
 
 ## Kullanım
 
-Uygulama başladığında:
+Uygulama tarayıcıda açıldığında:
 
-1. Session ID görüntülenir
-2. AI provider bilgisi gösterilir
-3. Plugin'ler listelenir
-4. Soru-cevap döngüsü başlar
+1. Ollama modelleri listelenir.
+2. Model ve üretim profili seçilir.
+3. Soru gönderilir.
+4. Cevap beklenirken animasyon gösterilir.
+5. Cevap streaming olarak ekrana gelir.
 
 Örnek konuşma:
 ```
@@ -191,6 +232,16 @@ Asistan: UMAI Bilişim olarak üç farklı aydınlatma ürünümüz bulunmaktad�
 Soru: Masa lambasının fiyatı nedir?
 Asistan: Masa lambamızın fiyatı 300 TL'dir...
 ```
+
+Aynı yaratıcı soruyu farklı profillerle denemek için:
+
+```text
+Masa lambasını gençlere hitap eden yaratıcı bir reklam kampanyasının
+merkezine koy. Kampanya adı, slogan ve kısa sosyal medya metni hazırla.
+```
+
+Bu soruyu Dengeli, Yaratıcı ve Odaklı profillerle tekrar göndererek model
+ayarlarının çıktıya etkisini gözlemleyebilirsiniz.
 
 ## Chat History
 
@@ -344,31 +395,18 @@ kernelBuilder.Plugins.AddFromObject(new YourPlugin(dbContext));
 dotnet ef migrations add YourMigrationName
 ```
 
-### Cloud Ollama Kullanımı
+### Cloud Ollama ve Azure OpenAI
 
-Cloud/Remote Ollama kullanmak için:
-
-1. `appsettings.json`'da `AiProvider`'ı `"CloudOllama"` yapın
-2. Cloud endpoint URL'ini ayarlayın
-3. Model adını belirtin
-
-**Not**: Ollama connector temel authentication desteklemez. Eğer API key 
-gerekiyorsa, reverse proxy (nginx/caddy) kullanarak authentication ekleyebilirsiniz.
+Bu provider'lar için örnek ayar alanları `appsettings.json` içinde tutulur;
+ancak mevcut `Program.cs` akışında henüz aktif değildir. Provider eklemek için
+ilgili connector kaydı, kimlik doğrulama ve model seçimi akışı ayrıca
+uygulanmalıdır.
 
 ### OpenAI Kullanımı
 
 1. `appsettings.json`'da `AiProvider`'ı `"OpenAI"` yapın
 2. OpenAI API key'inizi ekleyin
 3. Model adını seçin (gpt-4o-mini, gpt-4, vb.)
-
-### Azure OpenAI Kullanımı
-
-1. Azure OpenAI resource oluşturun
-2. Model deploy edin
-3. `appsettings.json`'da ayarları yapın:
-   - Endpoint URL
-   - API Key
-   - Deployment Name
 
 ## Yol Haritası
 
@@ -378,9 +416,10 @@ Bu repo bir seri halinde geliştirilmektedir.
 2.  Semantic Kernel + Tool Calling ✅
 3.  Kalıcı Chat Memory (PostgreSQL) ✅
 4.  Multi-Provider Support (Ollama/OpenAI/Azure) ✅
-5.  RAG (Retrieval Augmented Generation) 🔄
-6.  Multi-Agent Mimarisi 📋
-7.  Production Senaryoları 📋
+5.  Etkileşimli LLM Playground ✅
+6.  RAG (Retrieval Augmented Generation) 📋
+7.  Multi-Agent Mimarisi 📋
+8.  Production Senaryoları 📋
 
 ## Katkıda Bulunma
 
