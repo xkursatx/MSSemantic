@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MSSemantic.Data;
+using MSSemantic.Models;
 using MSSemantic.Services;
 using MSSemantic.ViewModels;
 
@@ -33,11 +34,14 @@ public sealed class HomeController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Ask(Guid sessionId, string question,
-        CancellationToken cancellationToken)
+        double temperature = 0.7, double topP = 0.9, int topK = 40,
+        int maxTokens = 512, CancellationToken cancellationToken = default)
     {
         try
         {
-            await _chatService.AskAsync(sessionId, question, cancellationToken);
+            await _chatService.AskAsync(sessionId, question,
+                new ChatGenerationOptions(temperature, topP, topK, maxTokens),
+                cancellationToken);
             return RedirectToAction(nameof(Index), new { sessionId });
         }
         catch (ArgumentException exception)
@@ -48,6 +52,31 @@ public sealed class HomeController : Controller
         {
             return View(nameof(Index), await BuildViewModelAsync(sessionId, question,
                 "AI servisine ulaşılamadı. Ollama çalışıyor mu?"));
+        }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task Stream(Guid sessionId, string question,
+        double temperature = 0.7, double topP = 0.9, int topK = 40,
+        int maxTokens = 512, CancellationToken cancellationToken = default)
+    {
+        if (sessionId == Guid.Empty || string.IsNullOrWhiteSpace(question))
+        {
+            Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        Response.ContentType = "text/plain; charset=utf-8";
+        Response.Headers.CacheControl = "no-cache";
+
+        await foreach (var chunk in _chatService.StreamAsync(
+            sessionId, question,
+            new ChatGenerationOptions(temperature, topP, topK, maxTokens),
+            cancellationToken))
+        {
+            await Response.WriteAsync(chunk, cancellationToken);
+            await Response.Body.FlushAsync(cancellationToken);
         }
     }
 

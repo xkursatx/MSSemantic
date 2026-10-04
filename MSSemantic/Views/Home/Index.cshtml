@@ -19,12 +19,123 @@
     {
         <p class="error">@Model.Error</p>
     }
-    <form asp-action="Ask" method="post">
+    <section class="playground-settings">
+        <h2>Model Ayarları</h2>
+        <p class="hint">Aynı soruyu farklı ayarlarla deneyerek cevabın nasıl değiştiğini gözlemleyin.</p>
+        <label for="preset">Hazır profil</label>
+        <select id="preset">
+            <option value="balanced">Dengeli</option>
+            <option value="creative">Yaratıcı</option>
+            <option value="focused">Odaklı</option>
+        </select>
+        <div class="settings-grid">
+            <label>Temperature <output id="temperature-value">0.7</output>
+                <input id="temperature" name="temperature" type="range" min="0" max="1.5" step="0.1" value="0.7" />
+            </label>
+            <label>Top P <output id="topP-value">0.9</output>
+                <input id="topP" name="topP" type="range" min="0.1" max="1" step="0.05" value="0.9" />
+            </label>
+            <label>Top K <output id="topK-value">40</output>
+                <input id="topK" name="topK" type="range" min="1" max="100" step="1" value="40" />
+            </label>
+            <label>Maksimum token <output id="maxTokens-value">512</output>
+                <input id="maxTokens" name="maxTokens" type="range" min="64" max="2048" step="64" value="512" />
+            </label>
+        </div>
+        <p class="hint">Thinking ayarı modele özgüdür; bu Ollama connector sürümünde ortak bir seçenek olmadığı için gönderilmiyor.</p>
+    </section>
+    <form id="chat-form" asp-action="Stream" method="post">
         @Html.AntiForgeryToken()
         <input type="hidden" name="sessionId" value="@Model.SessionId" />
         <label for="question">Sorunuz</label>
         <textarea id="question" name="question" placeholder="Örneğin: 500 TL altındaki ürünler hangileri?">@Model.Question</textarea>
-        <button type="submit">Gönder</button>
+        <button id="send-button" type="submit">Gönder</button>
         <a asp-action="Index">Yeni konuşma</a>
     </form>
 </div>
+
+<script>
+    const form = document.getElementById("chat-form");
+    const questionInput = document.getElementById("question");
+    const sendButton = document.getElementById("send-button");
+    const chat = document.querySelector(".chat");
+    const temperature = document.getElementById("temperature");
+    const topP = document.getElementById("topP");
+    const topK = document.getElementById("topK");
+    const maxTokens = document.getElementById("maxTokens");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const question = questionInput.value.trim();
+        if (!question) return;
+
+        const formData = new FormData(form);
+        const userMessage = document.createElement("div");
+        userMessage.className = "message user";
+        userMessage.innerHTML = "<strong>Siz:</strong><div></div>";
+        userMessage.querySelector("div").textContent = question;
+        chat.insertBefore(userMessage, form);
+
+        const assistantMessage = document.createElement("div");
+        assistantMessage.className = "message assistant";
+        assistantMessage.innerHTML = "<strong>Cemile:</strong><div></div>";
+        chat.insertBefore(assistantMessage, form);
+        const answerElement = assistantMessage.querySelector("div");
+        const settings = document.createElement("small");
+        settings.className = "settings-used";
+        settings.textContent = `Ayarlar: sıcaklık ${temperature.value}, Top P ${topP.value}, Top K ${topK.value}, maksimum ${maxTokens.value} token`;
+        assistantMessage.appendChild(settings);
+
+        questionInput.value = "";
+        sendButton.disabled = true;
+
+        try {
+            const response = await fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: { "Accept": "text/plain" }
+            });
+
+            if (!response.ok || !response.body)
+                throw new Error("Streaming yanıt alınamadı.");
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                answerElement.textContent += decoder.decode(value, { stream: true });
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        } catch (error) {
+            answerElement.textContent = "AI servisine ulaşılamadı. Ollama çalışıyor mu?";
+        } finally {
+            sendButton.disabled = false;
+            questionInput.focus();
+        }
+    });
+
+    const profiles = {
+        balanced: { temperature: "0.7", topP: "0.9", topK: "40", maxTokens: "512" },
+        creative: { temperature: "1.2", topP: "0.95", topK: "80", maxTokens: "768" },
+        focused: { temperature: "0.2", topP: "0.6", topK: "20", maxTokens: "384" }
+    };
+
+    const preset = document.getElementById("preset");
+    const controls = ["temperature", "topP", "topK", "maxTokens"];
+    controls.forEach((name) => {
+        const control = document.getElementById(name);
+        const output = document.getElementById(`${name}-value`);
+        control.addEventListener("input", () => output.value = control.value);
+    });
+    preset.addEventListener("change", () => {
+        const profile = profiles[preset.value];
+        controls.forEach((name) => {
+            const control = document.getElementById(name);
+            control.value = profile[name];
+            document.getElementById(`${name}-value`).value = control.value;
+        });
+    });
+</script>
