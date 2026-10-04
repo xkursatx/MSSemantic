@@ -11,13 +11,20 @@ public sealed class ChatService
     private readonly Kernel _kernel;
     private readonly IChatCompletionService _completionService;
     private readonly IChatHistoryRepository _historyRepository;
+    private readonly OllamaModelCatalog _modelCatalog;
+    private readonly IConfiguration _configuration;
+    private readonly ILoggerFactory _loggerFactory;
 
     public ChatService(Kernel kernel, IChatCompletionService completionService,
-        IChatHistoryRepository historyRepository)
+        IChatHistoryRepository historyRepository, OllamaModelCatalog modelCatalog,
+        IConfiguration configuration, ILoggerFactory loggerFactory)
     {
         _kernel = kernel;
         _completionService = completionService;
         _historyRepository = historyRepository;
+        _modelCatalog = modelCatalog;
+        _configuration = configuration;
+        _loggerFactory = loggerFactory;
     }
 
     public async Task<string> AskAsync(Guid sessionId, string question,
@@ -31,7 +38,8 @@ public sealed class ChatService
         history.AddUserMessage(question);
         await _historyRepository.SaveMessageAsync(sessionId, AuthorRole.User, question);
 
-        var response = await _completionService.GetChatMessageContentAsync(history,
+        var completionService = await GetCompletionServiceAsync(options, cancellationToken);
+        var response = await completionService.GetChatMessageContentAsync(history,
             kernel: _kernel,
             executionSettings: CreateExecutionSettings(options),
             cancellationToken: cancellationToken);
@@ -49,12 +57,13 @@ public sealed class ChatService
         if (sessionId == Guid.Empty) throw new ArgumentException("Geçerli bir oturum bulunamadı.");
         if (string.IsNullOrWhiteSpace(question)) throw new ArgumentException("Soru boş bırakılamaz.");
 
+        var completionService = await GetCompletionServiceAsync(options, cancellationToken);
         var history = await _historyRepository.LoadHistoryAsync(sessionId, SystemPrompt);
         history.AddUserMessage(question);
         await _historyRepository.SaveMessageAsync(sessionId, AuthorRole.User, question);
 
         var answer = new System.Text.StringBuilder();
-        await foreach (var content in _completionService.GetStreamingChatMessageContentsAsync(
+        await foreach (var content in completionService.GetStreamingChatMessageContentsAsync(
             history,
             kernel: _kernel,
             executionSettings: CreateExecutionSettings(options),
@@ -87,6 +96,25 @@ public sealed class ChatService
             NumPredict = normalized.MaxTokens,
             FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
         };
+    }
+
+    private async Task<IChatCompletionService> GetCompletionServiceAsync(
+        ChatGenerationOptions? options,
+        CancellationToken cancellationToken)
+    {
+        if (!string.Equals(_configuration["AiProvider"], "LocalOllama",
+                StringComparison.OrdinalIgnoreCase))
+            return _completionService;
+
+        var model = await _modelCatalog.ResolveModelAsync(
+            options?.Model, cancellationToken);
+        var endpoint = _configuration["OllamaSettings:Local:Endpoint"]
+            ?? "http://localhost:11434";
+
+#pragma warning disable CS0618
+        return new OllamaChatCompletionService(
+            model, new Uri(endpoint), _loggerFactory);
+#pragma warning restore CS0618
     }
 
     private const string SystemPrompt = """

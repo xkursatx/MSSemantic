@@ -22,24 +22,38 @@
     <section class="playground-settings">
         <h2>Model Ayarları</h2>
         <p class="hint">Aynı soruyu farklı ayarlarla deneyerek cevabın nasıl değiştiğini gözlemleyin.</p>
+        <label for="model">Ollama modeli</label>
+        <select id="model" name="model" form="chat-form">
+            @if (Model.Models.Count == 0)
+            {
+                <option value="">Ollama modelleri alınamadı</option>
+            }
+            else
+            {
+                @foreach (var availableModel in Model.Models)
+                {
+                    <option value="@availableModel" selected="@(availableModel == Model.SelectedModel)">@availableModel</option>
+                }
+            }
+        </select>
         <label for="preset">Hazır profil</label>
-        <select id="preset">
+        <select id="preset" form="chat-form">
             <option value="balanced">Dengeli</option>
             <option value="creative">Yaratıcı</option>
             <option value="focused">Odaklı</option>
         </select>
         <div class="settings-grid">
             <label>Temperature <output id="temperature-value">0.7</output>
-                <input id="temperature" name="temperature" type="range" min="0" max="1.5" step="0.1" value="0.7" />
+                <input id="temperature" name="temperature" form="chat-form" type="range" min="0" max="1.5" step="0.1" value="0.7" />
             </label>
             <label>Top P <output id="topP-value">0.9</output>
-                <input id="topP" name="topP" type="range" min="0.1" max="1" step="0.05" value="0.9" />
+                <input id="topP" name="topP" form="chat-form" type="range" min="0.1" max="1" step="0.05" value="0.9" />
             </label>
             <label>Top K <output id="topK-value">40</output>
-                <input id="topK" name="topK" type="range" min="1" max="100" step="1" value="40" />
+                <input id="topK" name="topK" form="chat-form" type="range" min="1" max="100" step="1" value="40" />
             </label>
             <label>Maksimum token <output id="maxTokens-value">512</output>
-                <input id="maxTokens" name="maxTokens" type="range" min="64" max="2048" step="64" value="512" />
+                <input id="maxTokens" name="maxTokens" form="chat-form" type="range" min="64" max="2048" step="64" value="512" />
             </label>
         </div>
         <p class="hint">Thinking ayarı modele özgüdür; bu Ollama connector sürümünde ortak bir seçenek olmadığı için gönderilmiyor.</p>
@@ -79,12 +93,13 @@
 
         const assistantMessage = document.createElement("div");
         assistantMessage.className = "message assistant";
-        assistantMessage.innerHTML = "<strong>Cemile:</strong><div></div>";
+        assistantMessage.innerHTML = "<strong>Cemile:</strong><div class=\"answer-text\"></div><div class=\"typing-indicator\" aria-label=\"Cevap hazırlanıyor\"><i></i><i></i><i></i></div>";
         chat.insertBefore(assistantMessage, form);
-        const answerElement = assistantMessage.querySelector("div");
+        const answerElement = assistantMessage.querySelector(".answer-text");
+        const typingIndicator = assistantMessage.querySelector(".typing-indicator");
         const settings = document.createElement("small");
         settings.className = "settings-used";
-        settings.textContent = `Ayarlar: sıcaklık ${temperature.value}, Top P ${topP.value}, Top K ${topK.value}, maksimum ${maxTokens.value} token`;
+        settings.textContent = `Model: ${model.value || "varsayılan"} · Ayarlar: sıcaklık ${temperature.value}, Top P ${topP.value}, Top K ${topK.value}, maksimum ${maxTokens.value} token`;
         assistantMessage.appendChild(settings);
 
         questionInput.value = "";
@@ -106,10 +121,12 @@
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;
+                typingIndicator.hidden = true;
                 answerElement.textContent += decoder.decode(value, { stream: true });
                 window.scrollTo(0, document.body.scrollHeight);
             }
         } catch (error) {
+            typingIndicator.hidden = true;
             answerElement.textContent = "AI servisine ulaşılamadı. Ollama çalışıyor mu?";
         } finally {
             sendButton.disabled = false;

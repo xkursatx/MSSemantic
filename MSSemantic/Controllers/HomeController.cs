@@ -12,13 +12,16 @@ public sealed class HomeController : Controller
     private readonly ApplicationDbContext _dbContext;
     private readonly IChatHistoryRepository _historyRepository;
     private readonly ChatService _chatService;
+    private readonly OllamaModelCatalog _modelCatalog;
 
     public HomeController(ApplicationDbContext dbContext,
-        IChatHistoryRepository historyRepository, ChatService chatService)
+        IChatHistoryRepository historyRepository, ChatService chatService,
+        OllamaModelCatalog modelCatalog)
     {
         _dbContext = dbContext;
         _historyRepository = historyRepository;
         _chatService = chatService;
+        _modelCatalog = modelCatalog;
     }
 
     [HttpGet]
@@ -35,12 +38,13 @@ public sealed class HomeController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Ask(Guid sessionId, string question,
         double temperature = 0.7, double topP = 0.9, int topK = 40,
-        int maxTokens = 512, CancellationToken cancellationToken = default)
+        int maxTokens = 512, string? model = null,
+        CancellationToken cancellationToken = default)
     {
         try
         {
             await _chatService.AskAsync(sessionId, question,
-                new ChatGenerationOptions(temperature, topP, topK, maxTokens),
+                new ChatGenerationOptions(temperature, topP, topK, maxTokens, model),
                 cancellationToken);
             return RedirectToAction(nameof(Index), new { sessionId });
         }
@@ -59,7 +63,8 @@ public sealed class HomeController : Controller
     [ValidateAntiForgeryToken]
     public async Task Stream(Guid sessionId, string question,
         double temperature = 0.7, double topP = 0.9, int topK = 40,
-        int maxTokens = 512, CancellationToken cancellationToken = default)
+        int maxTokens = 512, string? model = null,
+        CancellationToken cancellationToken = default)
     {
         if (sessionId == Guid.Empty || string.IsNullOrWhiteSpace(question))
         {
@@ -72,7 +77,7 @@ public sealed class HomeController : Controller
 
         await foreach (var chunk in _chatService.StreamAsync(
             sessionId, question,
-            new ChatGenerationOptions(temperature, topP, topK, maxTokens),
+            new ChatGenerationOptions(temperature, topP, topK, maxTokens, model),
             cancellationToken))
         {
             await Response.WriteAsync(chunk, cancellationToken);
@@ -87,7 +92,18 @@ public sealed class HomeController : Controller
             .Where(x => x.SessionId == sessionId && x.Role != "system")
             .OrderBy(x => x.Id).AsNoTracking().ToListAsync();
 
+        IReadOnlyList<string> models = [];
+        try
+        {
+            models = await _modelCatalog.GetModelsAsync();
+        }
+        catch (HttpRequestException)
+        {
+            // Ollama kapalıysa chat ekranı yine açılabilsin.
+        }
+
         return new ChatViewModel { SessionId = sessionId, Question = question,
-            Error = error, Messages = messages };
+            Error = error, Messages = messages, Models = models,
+            SelectedModel = models.FirstOrDefault() };
     }
 }

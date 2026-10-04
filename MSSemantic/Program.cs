@@ -14,6 +14,7 @@ var connectionString = configuration.GetConnectionString("DefaultConnection")
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddScoped<IChatHistoryRepository, PostgresChatHistoryRepository>();
+builder.Services.AddHttpClient<OllamaModelCatalog>();
 
 builder.Services.AddScoped<Kernel>(serviceProvider =>
 {
